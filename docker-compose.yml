@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  authentication:
+    build: ./apps/authentication
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/monorepo
+    ports:
+      - "8877:8877"
+
+  gateway:
+    build: ./apps/gateway
+    depends_on:
+      - authentication
+    ports:
+      - "3000:3000"
